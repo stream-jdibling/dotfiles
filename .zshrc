@@ -1,7 +1,11 @@
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="devcontainers"   # the theme the image ships with, so your prompt looks the same
+if [ -f "$ZSH/custom/themes/devcontainers.zsh-theme" ]; then
+    ZSH_THEME="devcontainers"   # the theme today's image ships with
+else
+    ZSH_THEME="robbyrussell"    # oh-my-zsh's default, for images without it
+fi
 plugins=(git)
 source "$ZSH/oh-my-zsh.sh"
 
-# carried over from .devcontainer/bash_aliases; it comes after oh-my-zsh because oh-my-zsh defines its own ll
+# after oh-my-zsh, which defines its own ll
 alias ll='ls -laFh'
