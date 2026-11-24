@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
+
+if ! command -v zsh >/dev/null; then
+    sudo apt-get update
+    sudo apt-get install -y zsh
+fi
+
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
+fi
+
 ln -sf "$here/.zshrc" "$HOME/.zshrc"
-sudo chsh -s /usr/bin/zsh "$(id -un)"
+
+zsh_path="$(command -v zsh)"
+if [ "$(getent passwd "$(id -un)" | cut -d: -f7)" != "$zsh_path" ]; then
+    sudo chsh -s "$zsh_path" "$(id -un)"
+fi
+
